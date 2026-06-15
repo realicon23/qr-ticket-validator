@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qr-ticket-validator"
+version = "0.1.0"
+description = "Dependency-free prototype for signed QR ticket validation and duplicate check-in prevention."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Ridwan Aguda" }
+]
+keywords = ["event-tech", "ticketing", "qr", "check-in", "hmac"]
+
+[project.scripts]
+qr-ticket-validator = "qr_ticket_validator.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
