@@ -11,13 +11,11 @@ The project models a core workflow used by digital ticketing platforms:
 5. prevent duplicate check-ins
 6. keep an audit trail for ticket decisions
 
-It is designed as a public, inspectable example of product-led event-tech architecture rather than a production service.
+It is intentionally small: the core workflow can be read, run, and tested without external services.
 
-## Why This Project Exists
+## What It Demonstrates
 
-Event ticketing platforms need to prove that each ticket is authentic, belongs to the correct event, and has not already been used. A manual process is easy to manipulate; a product-led workflow should verify ticket integrity programmatically.
-
-This prototype demonstrates:
+This prototype covers:
 
 - HMAC-signed ticket payloads
 - event-scoped validation
@@ -123,20 +121,25 @@ Every validation decision is logged with:
 - decision
 - reason
 
-## Product-Led Platform Relevance
+## Project Scope
 
-This project maps to common ticketing platform features:
+Implemented:
 
-- automated digital ticket issue
-- self-service customer confirmation
-- programmatic venue check-in
-- fraud/tamper detection
-- operational reporting
-- event capacity controls
+- in-memory event and ticket storage
+- HMAC token signing and verification
+- capacity checks at ticket issue
+- check-in validation decisions
+- audit records for each validation attempt
 
-It can be extended into a web API, mobile check-in app, or organiser analytics dashboard.
+Not implemented:
 
-## Roadmap
+- payment processing
+- persistent database storage
+- QR image rendering
+- web or mobile user interface
+- user accounts or roles
+
+## Possible Extensions
 
 - Add FastAPI service wrapper
 - Add SQLite persistence

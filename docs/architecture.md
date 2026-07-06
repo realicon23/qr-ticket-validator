@@ -1,6 +1,6 @@
 # Architecture Notes
 
-This prototype uses an in-memory service to make the ticket lifecycle easy to inspect. A production platform would split these responsibilities into API, database, payment, and mobile/web check-in layers.
+This prototype uses an in-memory service to keep the ticket lifecycle easy to inspect. The current implementation does not include a web API, database, payment layer, or mobile check-in client.
 
 ## Core Components
 
@@ -23,17 +23,17 @@ The validator can return:
 - `rejected_invalid_signature`
 - `rejected_unknown_ticket`
 
-## Product Platform Mapping
+## Implemented Behaviors
 
-| Prototype feature | Platform equivalent |
+| Feature | Implementation |
 |---|---|
-| HMAC-signed payload | Tamper-resistant digital ticket |
-| Event-scoped validation | Prevent tickets being reused across events |
-| Duplicate check-in prevention | Gate/venue access control |
-| Audit log | Operational reporting and dispute review |
-| Capacity tracking | Ticket inventory management |
+| HMAC-signed payload | `signing.py` signs and verifies compact tokens |
+| Event-scoped validation | `TicketService.validate` checks the expected event ID |
+| Duplicate check-in prevention | A ticket with `checked_in_at` is rejected on reuse |
+| Audit log | `AuditLog` records every validation decision |
+| Capacity tracking | `TicketService.issue_ticket` enforces event capacity |
 
-## Production Extensions
+## Possible Extensions
 
 Potential next steps:
 
