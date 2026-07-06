@@ -73,7 +73,7 @@ python3 examples/demo.py
 Run the tests:
 
 ```bash
-python3 -m unittest discover -s tests
+PYTHONPATH=src python3 -m unittest discover -s tests
 ```
 
 Run the CLI:
