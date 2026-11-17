@@ -2,6 +2,7 @@
 
 from datetime import datetime, timezone
 from pathlib import Path
+import secrets
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,9 +13,9 @@ from qr_ticket_validator.signing import decode_token, encode_token  # noqa: E402
 
 
 def main() -> None:
-    service = TicketService(secret="demo-secret-change-me")
+    service = TicketService(secret=secrets.token_urlsafe(32))
     event = service.create_event(
-        "Tech as a Superpower",
+        "Sample Event",
         starts_at=datetime(2026, 5, 2, 10, 0, tzinfo=timezone.utc),
         capacity=100,
     )

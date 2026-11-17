@@ -6,6 +6,7 @@ import base64
 import hashlib
 import hmac
 import json
+import re
 from typing import Any
 
 
@@ -43,6 +44,8 @@ def encode_token(payload: dict[str, Any], secret: str) -> str:
 def decode_token(token: str) -> dict[str, Any]:
     """Decode a QR-compatible token into its envelope."""
 
+    if not isinstance(token, str) or len(token) > 4096 or not re.fullmatch(r"[A-Za-z0-9_-]+", token):
+        raise ValueError("invalid token encoding")
     decoded = _b64decode(token)
     data = json.loads(decoded.decode("utf-8"))
     if not isinstance(data, dict) or "payload" not in data or "signature" not in data:
@@ -51,16 +54,21 @@ def decode_token(token: str) -> dict[str, Any]:
 
 
 def verify_token(token: str, secret: str) -> tuple[bool, dict[str, Any] | None]:
-    """Verify a token and return its payload when valid."""
+    """Verify a token. A payload returned after signature failure is untrusted."""
 
     try:
         envelope = decode_token(token)
-    except (ValueError, json.JSONDecodeError, UnicodeDecodeError):
+    except (ValueError, UnicodeDecodeError, RecursionError):
         return False, None
 
     payload = envelope["payload"]
     signature = envelope["signature"]
-    expected = sign_payload(payload, secret)
+    if not isinstance(payload, dict) or not isinstance(signature, str) or not re.fullmatch(r"[0-9a-f]{64}", signature):
+        return False, None
+    try:
+        expected = sign_payload(payload, secret)
+    except (RecursionError, ValueError, TypeError):
+        return False, None
     if not hmac.compare_digest(signature, expected):
         return False, payload if isinstance(payload, dict) else None
     return True, payload if isinstance(payload, dict) else None

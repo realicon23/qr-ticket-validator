@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import secrets
 from datetime import datetime, timezone
 
 from .models import Attendee
@@ -11,9 +12,9 @@ from .signing import decode_token, encode_token
 
 
 def run_demo() -> None:
-    service = TicketService(secret="demo-secret-change-me")
+    service = TicketService(secret=secrets.token_urlsafe(32))
     event = service.create_event(
-        "Tech as a Superpower",
+        "Sample Event",
         starts_at=datetime(2026, 5, 2, 10, 0, tzinfo=timezone.utc),
         capacity=100,
     )

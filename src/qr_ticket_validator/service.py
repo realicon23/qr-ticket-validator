@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import secrets
 from typing import Any
 
 from .audit import AuditLog
@@ -133,7 +134,7 @@ def _string(payload: dict[str, Any] | None, key: str) -> str | None:
 def demo_service() -> TicketService:
     """Create a service with one sample event and ticket for quick demos."""
 
-    service = TicketService(secret="demo-secret-change-me")
+    service = TicketService(secret=secrets.token_urlsafe(32))
     event = service.create_event(
         "Digital Literacy Workshop",
         starts_at=datetime(2026, 5, 2, 10, 0, tzinfo=timezone.utc),
